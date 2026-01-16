@@ -631,39 +631,19 @@ function FX:SendDebug(json, message)
 end
 
 -- Framework --
+-- [[ Params ]] --
 
--- HUD --
-function FX:Announce(clients, header, message, time)
-    TriggerClientEvent('FX_hud:announce', clients, header, message, time)
-end
 
-function FX:Progressbar(title, time)
-    TriggerEvent("FX_hud:progressbar", title or "Ladevorgang..", time)
-end
-
-function FX:ProgressbarCancel()
-    TriggerEvent("FX_hud:HideProgressbar")
-end
-
-function FX:HelpNotify(key, message)
-    TriggerEvent("FX_hud:helpnotify", key, message)
-end
-
-function FX:hide(state)
-    TriggerEvent("FX_hud:Request", state)
-end
-
-function FX:Request(data, cb)
-    TriggerEvent("FX_hud:Request", data, cb)
-end
-
-if not IsDuplicityVersion() then
-    function FX:Notify(type, title, message, time)
-        TriggerEvent("utoria_hud:notify", type, title, message, time)
+AddEventHandler('onResourceStart', function(resourceName)
+    if (GetCurrentResourceName() ~= resourceName) then
+        return
     end
-else
-    function FX:Notify(src, type, title, message, time)
-        TriggerClientEvent("utoria_hud:notify", src, type, title or "Information", message, time or 5000)
+
+    FX.Params = {}
+    FX:SendDebug(false, "» FX Params wurde geladen.")
+    FX:SendDebug(true, FX.Params)
+    if start then
+        start()
+        FX:SendDebug(false, "» FX Params Start Funktion wurde ausgeführt.")
     end
-end
--- HUD --
+end)
